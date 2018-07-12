@@ -15,14 +15,14 @@ module imem
 
         //isusedcolor()
         20 : op = {LI, 8'd0, 4'd12};            //reg12 = 0;
-        21 : op = {LI, 8'd33, 4'd1};            //reg1  = 33;
+        21 : op = {LI, 8'd23, 4'd1};            //reg1  = 23;
         22 : op = {ADD, 4'd1, 4'd10, 4'd1};     //reg1 += reg10;
-        23 : op = {LOAD, 4'd1, 4'd0, 4'd14};    //reg14 = mem[reg1];( reg14 = mem[33 + reg10]; )
+        23 : op = {LOAD, 4'd1, 4'd0, 4'd14};    //reg14 = mem[reg1];( reg14 = mem[23 + reg10]; )
         24 : op = {LOAD, 4'd1, 4'd1, 4'd15};    //reg15 = mem[1+reg1];
         25 : op = {SUB, 4'd15, 4'd14, 4'd13};   //reg13 = reg15 - reg14;
         26 : op = {ADD, 4'd14, 4'd12, 4'd15};   //do{reg15 = reg14 + reg12;
-        27 : op = {LOAD, 4'd15, 4'd0, 4'd15};   //  reg15 = mem[reg15]; ( reg15 = checkarea;)
-        28 : op = {LOAD, 4'd15, 4'd0, 4'd15};   //  reg15 = mem[reg15]; ( reg15 = areapat[aera][i]; )
+        27 : op = {LOAD, 4'd15, 4'd0, 4'd15};   //  reg15 = mem[reg15]; ( reg15 = checkarea; )
+        28 : op = {LOAD, 4'd15, 4'd0, 4'd15};   //  reg15 = mem[reg15]; ( reg15 = areapat[area][i]; )
         29 : op = {CMP, 4'd11, 4'd15, 4'h0};    //  if(reg15 == reg11)
         30 : op = {JNZ, 8'd50, 4'd0};           //      return true; ( goto nurenai)
         31 : op = {ADDI, 4'd12, 8'd1};          //  reg12++;
@@ -31,11 +31,11 @@ module imem
         34 : op = {JMP, 8'd26, 4'd0};           //}while(1);
 
         //colorsearch()
-        40 : op = {CMPI, 4'd10, 8'd33};         //do{if(reg10 == 33)
+        40 : op = {CMPI, 4'd10, 8'd23};         //do{if(reg10 == 23)
         41 : op = {JNZ, 8'd1, 4'd0};            //      return false;
         42 : op = {LOAD, 4'd10, 4'h0, 4'd11};   //  reg11 = mem[reg10];
         43 : op = {CMPI, 4'd11, 8'd4};          //  if(reg11 == 4)
-        44 : op = {JNZ, 8'd54, 4'd0};           // goto irotsukita
+        44 : op = {JNZ, 8'd54, 4'd0};           //    goto irotsukita
         45 : op = {ADDI, 4'd11, 8'd1};          //  reg11++;
         46 : op = {JMP, 8'd20, 4'd0};           //  do{ if(!isusedcolor()){
         47 : op = {STORE, 4'd10, 4'd11, 4'h0};  //          mem[reg10] = reg11;                     nureru
@@ -77,8 +77,8 @@ module imem
         83 : op = {LI, 8'd1, 4'd9};             //  reg9 = 1;
         84 : op = {JMP, 8'd100, 4'h0};          //  goto changeitr
             //button right
-        90 : op = {CMPI, 4'd3, 8'd32};
-        91 : op = {JNZ, 8'd70, 4'h0};           //if(!(reg3 == 32))
+        90 : op = {CMPI, 4'd3, 8'd22};
+        91 : op = {JNZ, 8'd70, 4'h0};           //if(!(reg3 == 22))
         92 : op = {ADDI, 4'd3, 8'd1};           //  reg3++;
         93 : op = {LI, 8'd1, 4'd9};             //  reg9 = 1;
         94 : op = {JMP, 8'd100, 4'h0};          //  goto changeitr
@@ -103,7 +103,7 @@ module imem
         123: op = {JMP, 8'd140, 4'd0};          //goto show;
 
             //show
-        140: op = {LI, 8'd215, 4'd1};           //reg1 = 215;
+        140: op = {LI, 8'd159, 4'd1};           //reg1 = 159;
         141: op = {LI, 8'hfb, 4'd8};            //reg8 = 8'hfb;
         142: op = {ADD, 4'd1, 4'd5, 4'd7};      //reg7 = reg1 + reg5;                          10nokurai
         143: op = {LOAD, 4'd7, 4'h0, 4'd7};     //reg7 = mem[reg7]; (reg7 = mem[215+reg5];)
