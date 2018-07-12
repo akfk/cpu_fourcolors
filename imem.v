@@ -11,7 +11,7 @@ module imem
   always @(*) begin
     case (pc)
         0  : op = {JMP, 8'd40, 4'd0};           //colorsearch();
-        1  : op = {JMP, 8'd60, 4'd0};           //goto print                                          nuriowari
+        1  : op = {JMP, 8'd100, 4'd0};           //goto print                                          nuriowari
 
         //isusedcolor()
         20 : op = {LI, 8'd0, 4'd12};            //reg12 = 0;
