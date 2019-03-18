@@ -1,10 +1,10 @@
 CPU for four-color map problem on FPGA
 ====
 
-##Usage
+## Usage
 
 Write the relations of adjoins to the memory in advance.
 
-assembly source are written in imem.v.
+The assembly source is written in imem.v.
 
 
