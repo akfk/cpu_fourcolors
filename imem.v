@@ -53,75 +53,72 @@ module imem
 
         //print result
 
-        //getpbstate
-        60 : op = {LI, 8'hfb, 4'd8};            //reg8 = 8'hfb;
-        61 : op = {LOAD, 4'd8, 4'h0, 4'd2};     //reg2 = mem[8'hfb];
-        62 : op = {CMPI, 4'd9, 8'd1};           //if(reg9 == 1)
-        63 : op = {JNZ, 8'd68, 4'd0};           //  goto if buttonnone
+                //getpbstate
+                60 : op = {LI, 8'hfb, 4'd8};            //reg8 = 8'hfb;
+                61 : op = {LOAD, 4'd8, 4'h0, 4'd2};     //reg2 = mem[8'hfb];
+                62 : op = {CMPI, 4'd9, 8'd1};           //if(reg9 == 1)
+                63 : op = {JNZ, 8'd68, 4'd0};           //  goto if buttonnone
+        
+                64 : op = {CMPI, 4'd2, 8'b00000010};    //if(reg2 == 8'b00000100){
+                65 : op = {JNZ, 8'd80, 4'h0};           //  goto buttonleft;}
+                66 : op = {CMPI, 4'd2, 8'b00000100};    //if(reg2 == 8'b00000010){
+                67 : op = {JNZ, 8'd90, 4'h0};           //  goto buttonright;}
+                68 : op = {CMPI, 4'd2, 8'b00000000};    //if(reg2 == 8'b00000000){
+                69 : op = {JNZ, 8'd75, 4'h0};           //  goto buttonnone;}
+                70 : op = {JMP, 8'd60, 4'd0};           //goto getpbstate;
+        
+                    //button none
+                75 : op = {LI, 8'd0, 4'd9};             //reg9 = 0;
+                76 : op = {JMP, 8'd70, 4'd0};           //goto getpbstate
+                    //button left
+                80 : op = {CMPI, 4'd3, 8'd0};
+                81 : op = {JNZ, 8'd68, 4'h0};           //if(!(reg3 == 0))
+                82 : op = {SUBI, 4'd3, 8'd1};           //  reg3--;
+                83 : op = {LI, 8'd1, 4'd9};             //  reg9 = 1;
+                84 : op = {JMP, 8'd100, 4'h0};          //  goto changeitr
+                    //button right
+                90 : op = {CMPI, 4'd3, 8'd32};
+                91 : op = {JNZ, 8'd70, 4'h0};           //if(!(reg3 == 32))
+                92 : op = {ADDI, 4'd3, 8'd1};           //  reg3++;
+                93 : op = {LI, 8'd1, 4'd9};             //  reg9 = 1;
+                94 : op = {JMP, 8'd100, 4'h0};          //  goto changeitr
+        
+                //changeitr
+                100: op = {LI, 8'd0, 4'd5};             //reg5 = 0;
+                101: op = {LI, 8'd0, 4'd7};             //reg7 = 0;
+                102: op = {LOAD, 4'd3, 4'd0, 4'd4};     //reg4 = mem[reg3];
+                103: op = {ADD, 4'd3, 4'd7, 4'd1};      //reg1 = reg3 + reg7;
+                104: op = {SUBI, 4'd1, 8'd10};          //reg1 -= 10;                       10de hiku kaishi
+                105: op = {LI, 8'b10000000, 4'd7};      //reg7 = 2'b10000000;
+                106: op = {AND, 4'd1, 4'd7, 4'd7};      //reg7 = reg1 & reg7;
+                107: op = {CMPI, 4'd7, 8'b10000000};    //if(reg7 == 2'b10000000)     8bit me ga 1 nara
+                108: op = {JNZ, 8'd120, 4'd0};          //  goto hikiowari
+                109: op = {ADDI, 4'd5, 8'd1};           //reg5++;
+                110: op = {JMP, 8'd104, 4'd0};          //goto 10dehikukaishi
+        
+                    //hikiowari
+                120: op = {LI, 8'd0, 4'd7};             //reg7 = 0;
+                121: op = {ADD, 4'd1, 4'd7, 4'd6};      //reg6 = reg1 + reg7;
+                122: op = {ADDI, 4'd6, 8'd10};          //reg6 +=10;
+                123: op = {JMP, 8'd140, 4'd0};          //goto show;
+        
+                    //show
+                140: op = {LI, 8'd215, 4'd1};           //reg1 = 215;
+                141: op = {LI, 8'hfb, 4'd8};            //reg8 = 8'hfb;
+                142: op = {ADD, 4'd1, 4'd5, 4'd7};      //reg7 = reg1 + reg5;                          10nokurai
+                143: op = {LOAD, 4'd7, 4'h0, 4'd7};     //reg7 = mem[reg7]; (reg7 = mem[215+reg5];)
+                144: op = {STORE, 4'd8, 4'd7, 4'd4};    //mem[reg8+4] = reg7;
+                145: op = {ADD, 4'd1, 4'd6, 4'd7};      //reg7 = reg1 + reg6;                           1nokurai
+                146: op = {LOAD, 4'd7, 4'h0, 4'd7};     //reg7 = mem[reg7];
+                147: op = {STORE, 4'd8, 4'd7, 4'd3};    //mem[reg8+3] = reg7;
+                148: op = {ADD, 4'd1, 4'd4, 4'd7};      //reg7 = reg1 + reg4;
+                149: op = {LOAD, 4'd7, 4'h0, 4'd7};      //reg7 = mem[reg7];
+                150: op = {STORE, 4'd8, 4'd7, 4'd1};    //mem[reg8+1] = reg7;
+                151: op = {LI, 8'hff, 4'd7};            //reg7 = 8'hff;
+                152: op = {STORE, 4'd8, 4'd7, 4'd2};    //mem[reg8+2] = reg7;(mem[reg8+2] = 8'hff;)
+                153: op = {JMP, 8'd60, 4'd0};           //goto getpbstate;
 
-        64 : op = {CMPI, 4'd2, 8'b00000010};    //if(reg2 == 8'b00000100){
-        65 : op = {JNZ, 8'd80, 4'h0};           //  goto buttonleft;}
-        66 : op = {CMPI, 4'd2, 8'b00000100};    //if(reg2 == 8'b00000010){
-        67 : op = {JNZ, 8'd90, 4'h0};           //  goto buttonright;}
-        68 : op = {CMPI, 4'd2, 8'b00000000};    //if(reg2 == 8'b00000000){
-        69 : op = {JNZ, 8'd75, 4'h0};           //  goto buttonnone;}
-        70 : op = {JMP, 8'd60, 4'd0};           //goto getpbstate;
-
-            //button none
-        75 : op = {LI, 8'd0, 4'd9};             //reg9 = 0;
-        76 : op = {JMP, 8'd70, 4'd0};           //goto getpbstate
-            //button left
-        80 : op = {CMPI, 4'd3, 8'd0};
-        81 : op = {JNZ, 8'd68, 4'h0};           //if(!(reg3 == 0))
-        82 : op = {SUBI, 4'd3, 8'd1};           //  reg3--;
-        83 : op = {LI, 8'd1, 4'd9};             //  reg9 = 1;
-        84 : op = {JMP, 8'd100, 4'h0};          //  goto changeitr
-            //button right
-        90 : op = {CMPI, 4'd3, 8'd32};
-        91 : op = {JNZ, 8'd70, 4'h0};           //if(!(reg3 == 32))
-        92 : op = {ADDI, 4'd3, 8'd1};           //  reg3++;
-        93 : op = {LI, 8'd1, 4'd9};             //  reg9 = 1;
-        94 : op = {JMP, 8'd100, 4'h0};          //  goto changeitr
-
-        //changeitr
-        100: op = {LI, 8'd0, 4'd5};             //reg5 = 0;
-        101: op = {LI, 8'd0, 4'd7};             //reg7 = 0;
-        102: op = {LOAD, 4'd3, 4'd0, 4'd4};     //reg4 = mem[reg3];
-        103: op = {ADD, 4'd3, 4'd7, 4'd1};      //reg1 = reg3 + reg7;
-        104: op = {SUBI, 4'd1, 8'd10};          //reg1 -= 10;                       10de hiku kaishi
-        105: op = {LI, 8'b10000000, 4'd7};      //reg7 = 2'b10000000;
-        106: op = {AND, 4'd1, 4'd7, 4'd7};      //reg7 = reg1 & reg7;
-        107: op = {CMPI, 4'd7, 8'b10000000};    //if(reg7 == 2'b10000000)     8bit me ga 1 nara
-        108: op = {JNZ, 8'd120, 4'd0};          //  goto hikiowari
-        109: op = {ADDI, 4'd5, 8'd1};           //reg5++;
-        110: op = {JMP, 8'd104, 4'd0};          //goto 10dehikukaishi
-
-            //hikiowari
-        120: op = {LI, 8'd0, 4'd7};             //reg7 = 0;
-        121: op = {ADD, 4'd1, 4'd7, 4'd6};      //reg6 = reg1 + reg7;
-        122: op = {ADDI, 4'd6, 8'd10};          //reg6 +=10;
-        123: op = {JMP, 8'd140, 4'd0};          //goto show;
-
-            //show
-        140: op = {LI, 8'd215, 4'd1};           //reg1 = 215;
-        141: op = {LI, 8'hfb, 4'd8};            //reg8 = 8'hfb;
-        142: op = {ADD, 4'd1, 4'd5, 4'd7};      //reg7 = reg1 + reg5;                          10nokurai
-        143: op = {LOAD, 4'd7, 4'h0, 4'd7};     //reg7 = mem[reg7]; (reg7 = mem[215+reg5];)
-        144: op = {STORE, 4'd8, 4'd7, 4'd4};    //mem[reg8+4] = reg7;
-        145: op = {ADD, 4'd1, 4'd6, 4'd7};      //reg7 = reg1 + reg6;                           1nokurai
-        146: op = {LOAD, 4'd7, 4'h0, 4'd7};     //reg7 = mem[reg7];
-        147: op = {STORE, 4'd8, 4'd7, 4'd3};    //mem[reg8+3] = reg7;
-        148: op = {ADD, 4'd1, 4'd4, 4'd7};      //reg7 = reg1 + reg4;
-        149: op = {LOAD, 4'd7, 4'h0, 4'd7};      //reg7 = mem[reg7];
-        150: op = {STORE, 4'd8, 4'd7, 4'd1};    //mem[reg8+1] = reg7;
-        151: op = {LI, 8'hff, 4'd7};             //reg7 = 8'hff;
-        152: op = {STORE, 4'd8, 4'd7, 4'd2};    //mem[reg8+2] = reg7;(mem[reg8+2] = 8'hff;)
-        153: op = {JMP, 8'd60, 4'd0};           //goto getpbstate;
-
-
-
-
-
+              
 
 
 

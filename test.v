@@ -7,7 +7,7 @@ module test;
 	wire [11:0]	led;
 
 	/* top */
-	top top_inst
+	fpga fpga_inst
 	(
 		.clk	(clk),
 		.rst_n	(rst_n),
@@ -18,9 +18,6 @@ module test;
 	always #5 clk = ~clk;
 
 	initial begin
-		$dumpfile("top_test.vcd");
-		$dumpvars(0, top_inst);
-		$dumplimit(1000000000);
 		$monitor($stime, "clk:%d rst:%b pb:%b led:%b", clk, rst_n, pb, led);
 		rst_n <= 0;
 		clk <= 0;
